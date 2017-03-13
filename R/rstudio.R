@@ -1,14 +1,18 @@
 
 make_rproj = function(path, rename = FALSE) {
+
   proj_name = basename(path)
-  if (length(existing <- list.files(path, pattern = "\\.Rproj$")) > 0) {
-    if (rename) {
-      file.rename(file.path(path, existing[1]),
-                  file.path(path, paste0(proj_name, ".Rproj")))
-    } else {
-      message("Path is already an RStudio project. ")
-    }
+  file_name = paste0(proj_name, ".Rproj")
+  file_path = file.path(path, file_name)
+  existing = list.files(path, pattern = "\\.Rproj$")
+
+  if (length(existing) > 0 && !rename) {
+    message("Path is already an RStudio project. ")
+    return(file.path(path, existing[1]))
+  } else if (length(existing) > 0 && rename) {
+    file.rename(file.path(path, existing[1]), file_path)
   } else {
-    copy_inst_file("template.Rproj", paste0(proj_name, ".Rproj"), path)
+    copy_inst_file("template.Rproj", file_name, path)
   }
+  return(file_path)
 }

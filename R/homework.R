@@ -25,18 +25,24 @@ hw_init = function(name, template = NULL, ...) {
   target_dir = hw_copy_template(name, template)
   message("Copy template: ", target_dir)
 
+  # make an rstudio project
+  proj_file = make_rproj(target_dir, rename = TRUE)
 
   # create an assignment repository
   res = hw_repo_create(name, ...)
   message("Create repository: ", name)
 
-  ## git init
+  ## Git
   repo = git2r::init(target_dir)
+  git2r::add(repo, proj_file)
+  git2r::commit(repo, message = "Initial commit.")
+  git2r::remote_add(repo, "origin", res$clone_url)
 
-
-  ## res$clone_url
-
-  return(res$clone_url)
+  return(list(
+    dir = target_dir,
+    repo = repo,
+    remote = res$clone_url
+  ))
 }
 
 

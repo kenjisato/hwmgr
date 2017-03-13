@@ -30,7 +30,7 @@ start_course = function(dir = ".") {
 
   subdirs = c("assignments", "solutions", "collected", "templates/blank")
   new_dirs = file.path(dir, subdirs)
-  if(any(dir.exists(dir))) {
+  if(any(dir.exists(subdirs))) {
     stop("Cannot create directories.")
   }
   lapply(new_dirs, dir.create, recursive = TRUE)

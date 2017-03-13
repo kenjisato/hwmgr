@@ -1,0 +1,21 @@
+# Configuration file
+
+# Teacher information
+lecturer:
+  name: "Your Name"
+  github: "githubaccount"
+  mail: "you@example.com"
+
+# Course Information
+course:
+  title: "Course Title (20XX)"
+  github: "org-for-a-course"
+  homepage: "https://example.com" # optional
+
+# Assignment directory
+assignments: "assignments/"
+
+# Template directories
+templates:
+  - "templates/coding"
+  - "templates/paper-writing"

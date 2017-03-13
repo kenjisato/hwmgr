@@ -17,7 +17,11 @@
 #' \dontrun{
 #' hw_init("assignment01", "template1")
 #' }
-hw_init = function(name, template = NULL, ...) {
+hw_init = function(name,
+                   description = NULL,
+                   template = NULL,
+                   ...,
+                   credentials = git2r::cred_token()) {
 
   cfg = config_load()
 
@@ -37,6 +41,8 @@ hw_init = function(name, template = NULL, ...) {
   git2r::add(repo, proj_file)
   git2r::commit(repo, message = "Initial commit.")
   git2r::remote_add(repo, "origin", res$clone_url)
+  git2r::push(repo, "origin", "refs/heads/master",
+              credentials = credentials)
 
   return(list(
     dir = target_dir,

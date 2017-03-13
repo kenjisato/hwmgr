@@ -22,14 +22,18 @@ hw_init = function(name, template = NULL, ...) {
   cfg = config_load()
 
   # copy template
-  message("Copy template to ", file.path(cfg$assignments, name))
-  hw_copy_template(name, template)
+  target_dir = hw_copy_template(name, template)
+  message("Copy template: ", target_dir)
+
 
   # create an assignment repository
-  message("Create repository ", name)
   res = hw_repo_create(name, ...)
+  message("Create repository: ", name)
 
-  ## git subtree
+  ## git init
+  repo = git2r::init(target_dir)
+
+
   ## res$clone_url
 
   return(res$clone_url)
@@ -60,7 +64,8 @@ hw_copy_template = function(name, template = NULL) {
   }
 
   # if the target directory already exists, abort
-  if (dir.exists(file.path(to_dir, name))) {
+  target_dir = file.path(to_dir, name)
+  if (dir.exists(target_dir)) {
     stop("Assignment name ", name, " is already taken.")
   }
 
@@ -69,9 +74,9 @@ hw_copy_template = function(name, template = NULL) {
             put_trailing_slash(to_dir), recursive = TRUE)
 
   # rename the target directory
-  file.rename(file.path(to_dir, basename(from_dir)), file.path(to_dir, name))
+  file.rename(file.path(to_dir, basename(from_dir)), target_dir)
 
-  message("Copy created in ", file.path(to_dir, name))
+  message("Copy created in ", target_dir)
 
   # remove unnecessary files
   git_dir =
@@ -80,6 +85,8 @@ hw_copy_template = function(name, template = NULL) {
 
   message("--- Remove .Ruser/")
   unlink(file.path(to_dir, name, ".Rproj.user"), recursive = TRUE)
+
+  return(target_dir)
 }
 
 

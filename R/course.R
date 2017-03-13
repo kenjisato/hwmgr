@@ -33,10 +33,7 @@ start_course = function(dir = ".") {
     stop("Cannot create directories.")
   }
   lapply(new_dirs, dir.create, recursive = TRUE)
-
-  file.copy(system.file("extdata", "config.yml", package = "hwmgr"),
-            file.path(dir, "config.yml"))
-
+  copy_inst_file("config.yml", "config.yml", dir)
   message("Course directories created at ", dir, ".")
 }
 

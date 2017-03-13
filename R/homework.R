@@ -19,6 +19,7 @@
 #' }
 hw_init = function(name,
                    description = NULL,
+                   homepage = NULL,
                    template = NULL,
                    ...,
                    credentials = git2r::cred_token()) {
@@ -33,7 +34,8 @@ hw_init = function(name,
   proj_file = make_rproj(target_dir, rename = TRUE)
 
   # create an assignment repository
-  res = hw_repo_create(name, ...)
+  res = hw_repo_create(name, description = description,
+                       homepage = homepage, ...)
   message("Create repository: ", name)
 
   ## Git
@@ -105,18 +107,18 @@ hw_copy_template = function(name, template = NULL) {
 # Create Repository -------------------------------------------------------
 
 hw_repo_create = function(name, personal = FALSE, ...,
-                          description, homepage) {
+                          description = NULL, homepage = NULL) {
   # Create a repository
   # https://developer.github.com/v3/repos/#create
 
   # Set body using config.yml
   cfg = config_load()
 
-  if (missing(description)) {
+  if (is.null(description)) {
     description = paste(cfg$course$title, ":", name)
   }
 
-  if (missing(homepage)) {
+  if (is.null(homepage)) {
     homepage = cfg$course$homepage
   }
 

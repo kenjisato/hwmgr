@@ -4,11 +4,15 @@ Title: Homework Management over GitHub Classroom and R
 Version: 0.0.0.9000
 Authors@R: person("Kenji", "Sato", email = "kenji@kenjisato.jp",
                   role = c("aut", "cre"))
-Maintainer: The package maintainer <yourself@somewhere.net>
+Maintainer: Kenji Sato <kenji@kenjisato.jp>
 Description: hwmgr talks to GitHub repositories, copies template files for 
     homework assignments distributed through GitHub Classroom.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: 
-    devtools
+Imports:
+    devtools,
+    httr,
+    yaml
+Suggests: testthat
+RoxygenNote: 6.0.1

@@ -6,22 +6,27 @@
 #' organization will be created with the specified name
 #'
 #' @param name Common name for local and remote repos.
+#' @param description Short description for the assignment.
 #' @param template key for template. If unspecified or nonexistent,
 #'     the first template is used.
 #' @param ... parameters passed to \code{hw_repo_create()}
+#' @param homepage Overwrite homepage defined in config
+#' @param private TRUE to make a private repository
+#' @param credentials credential to push
 #'
-#' @return Remote repository URL
+#' @return list(dir, repo, remote)
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' hw_init("assignment01", "template1")
+#' hw_init("assignment01", "first assignment", "coding")
 #' }
 hw_init = function(name,
                    description = NULL,
-                   homepage = NULL,
                    template = NULL,
                    ...,
+                   homepage = NULL,
+                   private = FALSE,
                    credentials = git2r::cred_token()) {
 
   cfg = config_load()
@@ -35,7 +40,7 @@ hw_init = function(name,
 
   # create an assignment repository
   res = hw_repo_create(name, description = description,
-                       homepage = homepage, ...)
+                       homepage = homepage, private = private, ...)
   message("Create repository: ", name)
 
   ## Git
@@ -107,7 +112,8 @@ hw_copy_template = function(name, template = NULL) {
 # Create Repository -------------------------------------------------------
 
 hw_repo_create = function(name, personal = FALSE, ...,
-                          description = NULL, homepage = NULL) {
+                          description = NULL, homepage = NULL,
+                          private = FALSE) {
   # Create a repository
   # https://developer.github.com/v3/repos/#create
 

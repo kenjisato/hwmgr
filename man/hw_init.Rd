@@ -4,18 +4,27 @@
 \alias{hw_init}
 \title{Create an assignment (starter codes and instructions)}
 \usage{
-hw_init(name, template = NULL, ...)
+hw_init(name, description = NULL, template = NULL, ..., homepage = NULL,
+  private = FALSE, credentials = git2r::cred_token())
 }
 \arguments{
 \item{name}{Common name for local and remote repos.}
+
+\item{description}{Short description for the assignment.}
 
 \item{template}{key for template. If unspecified or nonexistent,
 the first template is used.}
 
 \item{...}{parameters passed to \code{hw_repo_create()}}
+
+\item{homepage}{Overwrite homepage defined in config}
+
+\item{private}{TRUE to make a private repository}
+
+\item{credentials}{credential to push}
 }
 \value{
-Remote repository URL
+list(dir, repo, remote)
 }
 \description{
 This function creates assignment_dir/shortname directory.
@@ -24,6 +33,6 @@ organization will be created with the specified name
 }
 \examples{
 \dontrun{
-hw_init("assignment01", "template1")
+hw_init("assignment01", "first assignment", "coding")
 }
 }

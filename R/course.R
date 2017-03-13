@@ -1,5 +1,7 @@
 #' Set up a course directory.
 #'
+#' The default structure will be something like below:
+#'
 #' course
 #' ├── assignments
 #' │   ├── asgm01
@@ -13,8 +15,7 @@
 #' │   ├── asgm01
 #' │   └── asgm02
 #' └── templates
-#' ├── coding
-#' └── paper-writing
+#'     └── blank
 #'
 #' @param dir Path to the course directory.
 #'
@@ -27,13 +28,14 @@
 #' }
 start_course = function(dir = ".") {
 
-  subdirs = c("assignments", "solutions", "collected", "templates")
+  subdirs = c("assignments", "solutions", "collected", "templates/blank")
   new_dirs = file.path(dir, subdirs)
   if(any(dir.exists(dir))) {
     stop("Cannot create directories.")
   }
   lapply(new_dirs, dir.create, recursive = TRUE)
   copy_inst_file("config.yml", "config.yml", dir)
+  file.create(file.path(dir, "templates/blank/README.md"))
   message("Course directories created at ", dir, ".")
 }
 

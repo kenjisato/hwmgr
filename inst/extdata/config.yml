@@ -17,5 +17,4 @@ assignments: "assignments/"
 
 # Template directories
 templates:
-  - "templates/coding"
-  - "templates/paper-writing"
+  - "templates/blank"

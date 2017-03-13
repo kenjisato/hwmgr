@@ -10,6 +10,9 @@ start_course(dir = ".")
 \item{dir}{Path to the course directory.}
 }
 \description{
+The default structure will be something like below:
+}
+\details{
 course
 ├── assignments
 │   ├── asgm01
@@ -23,8 +26,7 @@ course
 │   ├── asgm01
 │   └── asgm02
 └── templates
-├── coding
-└── paper-writing
+    └── blank
 }
 \examples{
 \dontrun{

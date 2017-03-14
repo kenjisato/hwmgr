@@ -17,4 +17,4 @@ assignments: "assignments/"
 
 # Template directories
 templates:
-  - "templates/blank"
+  blank: "templates/blank"

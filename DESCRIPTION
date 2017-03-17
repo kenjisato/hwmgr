@@ -14,6 +14,8 @@ Imports:
     devtools,
     git2r,
     httr,
-    yaml
+    yaml,
+    readr,
+    stringr
 Suggests: testthat
 RoxygenNote: 6.0.1

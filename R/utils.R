@@ -21,3 +21,10 @@ put_trailing_slash = function(s) {
   }
   s
 }
+
+clean_datetime = function(datetime, tz = Sys.timezone()) {
+  if (!is.null(datetime)) {
+    datetime = lubridate::as_datetime(datetime, tz = tz)
+  }
+  datetime
+}

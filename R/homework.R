@@ -1,3 +1,49 @@
+homeworks = tibble::tribble(~id, ~name, ~description, ~publish, ~deadline, ~private)
+
+setup = function(id = sprintf("%02d", nrow(assignments) + 1),
+                 description = NULL,
+                 publish = NULL,
+                 deadline = NULL,
+                 private = TRUE,
+                 ...) {
+
+  data = list(id = id, description = description,
+              publish = clean_datetime(publish),
+              deadline = clean_datetime(deadline),
+              private = private)
+
+  c(data, list(...))
+}
+
+insert = function(info) {
+  # add to database
+  homeworks <<- tibble::add_row(homeworks,
+                                id = info$id,
+                                description = info$description,
+                                publish = info$publish,
+                                deadline = info$deadline,
+                                private = info$private)
+}
+
+start = function(info, template) {
+
+}
+
+publish = function(id) {
+
+}
+
+close = function(id) {
+
+}
+
+to_close = function() {
+
+}
+
+to_publish = function() {
+
+}
 
 #' Create an assignment (starter codes and instructions)
 #'
@@ -32,7 +78,7 @@ hw_init = function(name,
   cfg = config_load()
 
   # copy template
-  target_dir = hw_copy_template(name, template)
+  target_dir = hw_copy_template(template, name)
   message("Copy template: ", target_dir)
 
   # make an rstudio project
@@ -59,10 +105,12 @@ hw_init = function(name,
 }
 
 
-hw_copy_template = function(name, template = NULL) {
+hw_copy_template = function(template = NULL, name, data) {
   # Copy template directory as a new assignment
+  # data is the assignment specifig configurations
 
-  cfg = config_load()
+  config = config_load()
+
 
   if (is.null(template) || is.null(cfg$templates[[template]])) {
     template = 1

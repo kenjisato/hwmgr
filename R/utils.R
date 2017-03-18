@@ -15,6 +15,7 @@ copy_inst_file = function(file_name, new_name, to_dir, package = "hwmgr") {
             file.path(to_dir, new_name))
 }
 
+
 put_trailing_slash = function(s) {
   if (!endsWith(s, "/")) {
     s = paste0(s, "/")
@@ -22,9 +23,24 @@ put_trailing_slash = function(s) {
   s
 }
 
-clean_datetime = function(datetime, tz = Sys.timezone()) {
-  if (!is.null(datetime)) {
-    datetime = lubridate::as_datetime(datetime, tz = tz)
+
+readlineD = function(prompt, default = NULL) {
+  if (is.null(default)) {
+    readline(paste0(prompt, ": "))
+  } else {
+    res = readline(paste0(prompt, " [", default ,"]: "))
+    if (res == "") {
+      default
+    } else {
+      res
+    }
   }
+}
+
+
+clean_datetime = function(datetime, tz = Sys.timezone()) {
+  try({
+    return(lubridate::as_datetime(datetime, tz = tz))
+  }, silent = TRUE)
   datetime
 }

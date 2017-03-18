@@ -1,93 +1,86 @@
-homeworks = tibble::tribble(~id, ~name, ~description, ~publish, ~deadline, ~private)
+ask_about_homework = function(config) {
 
-setup = function(id = sprintf("%02d", nrow(assignments) + 1),
-                 description = NULL,
-                 publish = NULL,
-                 deadline = NULL,
-                 private = TRUE,
-                 ...) {
+  if (is.null(config$id)) {
+    readlineD("Code name [Default: NULL]")
+  }
 
-  data = list(id = id, description = description,
-              publish = clean_datetime(publish),
-              deadline = clean_datetime(deadline),
-              private = private)
+  id = readlineD("Code name [Default: NULL]")
+  description = readlineD("Short description [Default: NULL]")
+  publication = readlineD("Date of publication (format: 2017-4-30 17:00)")
+  deadine = readlineD("Deadline (format: 2017-4-30 17:00)")
 
-  c(data, list(...))
+  private_txt = readlineD("Keep the starter codes privately? [y/N]")
+  if (private_txt == "y" || private_txt == "Y") {
+    private = TRUE
+  } else {
+    private = FALSE
+  }
+
+  if (length(config$templates) > 0) {
+
+    if (!is.atomic(config$templates)) {
+      alternatives = names(config$templates)
+    } else {
+      alternatives = config$templates
+    }
+    choice = menu(c("NULL", alternatives), title = "Choose template")
+
+    if (choice == 1) {
+      template = NULL
+    } else {
+      template = alternatives[[choice - 1]]
+    }
+
+  } else {
+    template = NULL
+  }
+
+  invisible(list(
+    id = id,
+    description = description,
+    publication = clean_datetime(publication),
+    deadline = clean_datetime(deadline),
+    private = private,
+    template = template
+  ))
 }
 
-insert = function(info) {
-  # add to database
-  homeworks <<- tibble::add_row(homeworks,
-                                id = info$id,
-                                description = info$description,
-                                publish = info$publish,
-                                deadline = info$deadline,
-                                private = info$private)
-}
-
-start = function(info, template) {
-
-}
-
-publish = function(id) {
-
-}
-
-close = function(id) {
-
-}
-
-to_close = function() {
-
-}
-
-to_publish = function() {
-
-}
 
 #' Create an assignment (starter codes and instructions)
 #'
-#' This function creates assignment_dir/shortname directory.
-#' Put the template into the folder. A new repository for the course
-#' organization will be created with the specified name
-#'
-#' @param name Common name for local and remote repos.
-#' @param description Short description for the assignment.
-#' @param template key for template. If unspecified or nonexistent,
-#'     the first template is used.
-#' @param ... parameters passed to \code{hw_repo_create()}
-#' @param homepage Overwrite homepage defined in config
-#' @param private TRUE to make a private repository
+#' @param ... parameters to overwrite global options
 #' @param credentials credential to push
 #'
 #' @return list(dir, repo, remote)
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' hw_init("assignment01", "first assignment", "coding")
-#' }
-hw_init = function(name,
-                   description = NULL,
-                   template = NULL,
-                   ...,
-                   homepage = NULL,
-                   private = FALSE,
+hw_init = function(...,
+                   cfg = config_load("config.yml"),
                    credentials = git2r::cred_token()) {
 
-  cfg = config_load()
+  hw = ask_about_homework()
+  cfg = modifyList(cfg, c(hw, list(...)))
+
+  target_dir = cfg$structure$assignments
 
   # copy template
-  target_dir = hw_copy_template(template, name)
+  if (!is.null(hw$template)) {
+    template_use(cfg$structure[[hw$template]],
+                 target_dir, cfg$id, template_mapper(cfg))
+  } else {
+    template_use_empty()
+  }
+
   message("Copy template: ", target_dir)
 
   # make an rstudio project
   proj_file = make_rproj(target_dir, rename = TRUE)
 
   # create an assignment repository
-  res = hw_repo_create(name, description = description,
-                       homepage = homepage, private = private, ...)
-  message("Create repository: ", name)
+  res = hw_repo_create(cfg$id, description = cfg$description,
+                       homepage = cfg$course$homepage,
+                       private = cfg$private, ...)
+  message("Create repository: ", cfg$id)
 
   ## Git
   repo = git2r::init(target_dir)
@@ -202,4 +195,8 @@ hw_repo_delete = function(..., owner, repo) {
   req = github_api_delete(owner, repo)
   github_request(req, ...)
 }
+
+
+
+
 

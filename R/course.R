@@ -68,12 +68,13 @@ find_templates = function(template_root) {
   directories = files[is_directory]
 
   templates = list()
-  for (dir in directories) {
-    templates[basename(dir)] = dir
-  }
-
-  if (length(templates) == 0) {
-    return(template_root)
+  if (length(directories) == 0) {
+    template_use_empty(template_root, "blank")
+    templates["blank"] = file.path(template_root, "blank")
+  } else {
+    for (dir in directories) {
+      templates[basename(dir)] = dir
+    }
   }
   templates
 }

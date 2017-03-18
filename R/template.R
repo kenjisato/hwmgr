@@ -13,7 +13,7 @@ template_use = function(template, target_dir, name, map = file.copy,
                         skip = c(".git", ".Rproj.user")) {
 
   if (!dir.exists(target_dir)) {
-    stop("Target directory ", target, " does not exist.")
+    stop("Target directory ", target_dir, " does not exist.")
   }
 
   draft_dir = file.path(target_dir, name)

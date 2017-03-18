@@ -1,6 +1,7 @@
+
 # hwmgr : homework manager for github classroom
 
-## Setup GitHub {#setup-github}
+## Setup GitHub
 
 1. [Get a personal access token](https://github.com/settings/tokens).
    - Select `repo` and `admin:org` scopes.
@@ -14,7 +15,7 @@ GITHUB_PAT = "thelongsequenceofalphanumericcharacters"
    - You may want to [request a discount](https://education.github.com/discount_requests/new) 
      to create private repositories. **This takes time.**
    
-## Install `hwmgr` {#install-hwmgr}
+## Install `hwmgr`
 
 1. Install devtools if you haven't done this yet.
 ```
@@ -24,11 +25,15 @@ install.packages("devtools")
 ```
 devtools::install_github("kenjisato/hwmgr")
 ```
-3. Make a course directory by
+3. Make a course directory `my_course` and (optionally) make it an RStudio Project. 
+   Go to the R console and set that directory as the working directory by 
+   `setwd("/path/to/my_course")` or simply double clicking `my_couse.Rpfoj`.
+4. Do this in the console:
 ```
-hwmgr::start_course("my_course")
+hwmgr::start_course()
 ```
-   This command creates the following directory structure.
+   Configuration options will be collected through interactive dialogues. 
+   This command creates the following directory structure by default.
 ```
 my_course/
 ├── assignments/
@@ -44,22 +49,16 @@ my_course/
    - `config.yml` is the configuration file. **Open and edit**.
    - `solutions/` include suggested solutions.
    - `templates/` directory has templates for assignments.
-4. Modify `config.yml` file. 
-   - The `course.github` entry should be identical to the organization name you 
-     chose for the organization ([Step 3 of the previous section](#setup-github)). 
-5. Move to `my_course` directory and set it to the working directory.
 
-## Create an assignment with `hwmgr` {#create-an-assignment}
+## Create an assignment with `hwmgr`
 
 1. Create an assignment by
 ```
-hwmgr::hw_init("homework-name", "short description", template = "blank")
+hwmgr::draft_homework()
 ```
-   - This function call makes `assignments/homework-name` directory. 
-   - Template in `templates/blank` will be copied into there.
-   - You can modify these behaviors by properly setting `config.yml`.
-2. `assignments/homework-name` is now a git repository, whose `origin` is set to a
-   newly created `org/homework-name` repository.
+   Configuration options will be collected through interactive dialogues. 
+2. `assignments/homework-code-name` is now a git repository, whose `origin` is set to a
+   newly created `org/homework-code-name` repository.
 3. Edit template, add, commit, and push.
 
 ## Distribute the assignment with GitHub Classroom.

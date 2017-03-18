@@ -29,7 +29,7 @@ ask_about_homework = function(config) {
     } else {
       alternatives = config$templates
     }
-    choice = menu(c("NULL", alternatives), title = "Choose template")
+    choice = utils::menu(c("NULL", alternatives), title = "Choose template")
 
     if (choice == 1) {
       template = NULL
@@ -65,7 +65,7 @@ draft_homework = function(...,
                           course_config = config_load("config.yml"),
                           credentials = git2r::cred_token()) {
 
-  course_config = modifyList(course_config, list(...))
+  course_config = utils::modifyList(course_config, list(...))
 
   hw_config = ask_about_homework(course_config)
   cfg = c(course_config, hw_config)

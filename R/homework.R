@@ -1,13 +1,19 @@
 ask_about_homework = function(config) {
 
-  if (is.null(config$id)) {
-    readlineD("Code name [Default: NULL]")
+  while (TRUE) {
+    id = readlineD("Code name ")
+    if (id == "") {
+      message("Code name is required.")
+    } else if (file.exists(file.path(config$structure$assignments, id))) {
+      message("This name is already taken.")
+    } else {
+      break
+    }
   }
 
-  id = readlineD("Code name [Default: NULL]")
   description = readlineD("Short description [Default: NULL]")
   publication = readlineD("Date of publication (format: 2017-4-30 17:00)")
-  deadine = readlineD("Deadline (format: 2017-4-30 17:00)")
+  deadline = readlineD("Deadline (format: 2017-4-30 17:00)")
 
   private_txt = readlineD("Keep the starter codes privately? [y/N]")
   if (private_txt == "y" || private_txt == "Y") {
@@ -46,35 +52,38 @@ ask_about_homework = function(config) {
 }
 
 
-#' Create an assignment (starter codes and instructions)
+#' Create a homework assignment (starter codes and instructions)
 #'
 #' @param ... parameters to overwrite global options
+#' @param course_config used to override course parameters
 #' @param credentials credential to push
 #'
 #' @return list(dir, repo, remote)
 #' @export
 #'
-hw_init = function(...,
-                   cfg = config_load("config.yml"),
-                   credentials = git2r::cred_token()) {
+draft_homework = function(...,
+                          course_config = config_load("config.yml"),
+                          credentials = git2r::cred_token()) {
 
-  hw = ask_about_homework()
-  cfg = modifyList(cfg, c(hw, list(...)))
+  course_config = modifyList(course_config, list(...))
+
+  hw_config = ask_about_homework(course_config)
+  cfg = c(course_config, hw_config)
 
   target_dir = cfg$structure$assignments
 
   # copy template
-  if (!is.null(hw$template)) {
-    template_use(cfg$structure[[hw$template]],
+  if (!is.null(cfg$template)) {
+    template_use(cfg$structure$templates[[cfg$template]],
                  target_dir, cfg$id, template_mapper(cfg))
   } else {
-    template_use_empty()
+    template_use_empty(target_dir, cfg$id)
   }
 
   message("Copy template: ", target_dir)
 
   # make an rstudio project
-  proj_file = make_rproj(target_dir, rename = TRUE)
+  proj_file = make_rproj(target_dir, cfg$id, rename = TRUE)
 
   # create an assignment repository
   res = hw_repo_create(cfg$id, description = cfg$description,
@@ -96,59 +105,6 @@ hw_init = function(...,
     remote = res$clone_url
   ))
 }
-
-
-hw_copy_template = function(template = NULL, name, data) {
-  # Copy template directory as a new assignment
-  # data is the assignment specifig configurations
-
-  config = config_load()
-
-
-  if (is.null(template) || is.null(cfg$templates[[template]])) {
-    template = 1
-  }
-
-  from_dir = cfg$templates[[template]]
-  to_dir = cfg$assignments
-
-  # if template directory (specified in YAML) not existent, abort
-  if (!dir.exists(from_dir)) {
-    stop("template directory does not exist.")
-  }
-
-  # if assignments directory (specified in YAML) not existent,
-  # then create it
-  if (!dir.exists(to_dir)) {
-    dir.create(to_dir)
-  }
-
-  # if the target directory already exists, abort
-  target_dir = file.path(to_dir, name)
-  if (dir.exists(target_dir)) {
-    stop("Assignment name ", name, " is already taken.")
-  }
-
-  # copy template into assignments dir
-  file.copy(put_trailing_slash(from_dir),
-            put_trailing_slash(to_dir), recursive = TRUE)
-
-  # rename the target directory
-  file.rename(file.path(to_dir, basename(from_dir)), target_dir)
-
-  message("Copy created in ", target_dir)
-
-  # remove unnecessary files
-  git_dir =
-    message("--- Removing .git/")
-  unlink(file.path(to_dir, name, ".git"), recursive = TRUE)
-
-  message("--- Remove .Ruser/")
-  unlink(file.path(to_dir, name, ".Rproj.user"), recursive = TRUE)
-
-  return(target_dir)
-}
-
 
 # Create Repository -------------------------------------------------------
 

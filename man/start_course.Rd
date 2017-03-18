@@ -4,32 +4,16 @@
 \alias{start_course}
 \title{Set up a course directory.}
 \usage{
-start_course(dir = ".")
+start_course(config_name = "config.yml")
 }
 \arguments{
-\item{dir}{Path to the course directory.}
+\item{config_name}{Output file name.}
 }
 \description{
-The default structure will be something like below:
-}
-\details{
-course
-├── assignments
-│   ├── asgm01
-│   └── asgm02
-├── collected
-│   ├── asgm01-alice
-│   ├── asgm01-bob
-│   ├── asgm02-alice
-│   └── asgm02-bob
-├── solutions
-│   ├── asgm01
-│   └── asgm02
-└── templates
-    └── blank
+Set up a course directory.
 }
 \examples{
 \dontrun{
-start_course(".")
+start_course()
 }
 }

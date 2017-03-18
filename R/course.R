@@ -14,10 +14,10 @@ start_course = function(config_name = "config.yml") {
 
   structure_info = ask_about_structure()
   setup_structure(structure_info)
-  message("Course directories created in ", structure_info$root, ".")
+  message("Course directories created in ", structure_info$root)
 
   write_as_yaml(course_info, structure_info, config_name)
-  messge("Course information is saved in ", config_name, ".")
+  message("Course information is saved in ", config_name)
 
   invisible()
 }
@@ -97,7 +97,7 @@ setup_structure = function(structure_info) {
     dirs = c(dirs, structure_info$templates)
   }
 
-  for (dir in dirs) dir.create(dir)
+  for (dir in dirs) dir.create(dir, showWarnings = FALSE)
 
 }
 

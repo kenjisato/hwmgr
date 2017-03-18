@@ -1,6 +1,7 @@
-template_use_empty = function(draft_dir) {
+template_use_empty = function(target_dir, name) {
   # Empty template
 
+  draft_dir = file.path(target_dir, name)
   dir.create(draft_dir, recursive = TRUE)
   file.create(file.path(draft_dir, "README.md"))
 

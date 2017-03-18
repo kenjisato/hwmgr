@@ -25,10 +25,14 @@ install.packages("devtools")
 ```
 devtools::install_github("kenjisato/hwmgr")
 ```
-3. Make a course directory `my_course` and (optionally) make it an RStudio Project. 
+
+## Setup 
+
+1. Make a course directory `my_course` and (optionally) make it an RStudio Project. 
    Go to the R console and set that directory as the working directory by 
-   `setwd("/path/to/my_course")` or simply double clicking `my_couse.Rpfoj`.
-4. Do this in the console:
+   `setwd("/path/to/my_course")` or simply double clicking `my_couse.Rpfoj`
+   to open RStudio.
+2. Do this in the console:
 ```
 hwmgr::start_course()
 ```

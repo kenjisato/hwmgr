@@ -1,7 +1,7 @@
 ask_about_homework = function(config) {
 
   while (TRUE) {
-    id = readlineD("Code name ")
+    id = readlineD("ID ")
     if (id == "") {
       message("Code name is required.")
     } else if (file.exists(file.path(config$structure$assignments, id))) {

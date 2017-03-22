@@ -22,12 +22,12 @@ ask_about_homework = function(config) {
     private = FALSE
   }
 
-  if (length(config$templates) > 0) {
+  if (length(config$structure$templates) > 0) {
 
-    if (!is.atomic(config$templates)) {
-      alternatives = names(config$templates)
+    if (!is.atomic(config$structure$templates)) {
+      alternatives = names(config$structure$templates)
     } else {
-      alternatives = config$templates
+      alternatives = config$structure$templates
     }
     choice = utils::menu(c("NULL", alternatives), title = "Choose template")
 
@@ -73,7 +73,7 @@ draft_homework = function(...,
   target_dir = cfg$structure$assignments
 
   # copy template
-  if (!is.null(cfg$template)) {
+  if (!is.null(cfg$templates)) {
     template_use(cfg$structure$templates[[cfg$template]],
                  target_dir, cfg$id, template_mapper(cfg))
   } else {
@@ -92,7 +92,7 @@ draft_homework = function(...,
   message("Create repository: ", cfg$id)
 
   ## Git
-  repo = git2r::init(target_dir)
+  repo = git2r::init(file.path(target_dir, cfg$id))
   git2r::add(repo, proj_file)
   git2r::commit(repo, message = "Initial commit.")
   git2r::remote_add(repo, "origin", res$clone_url)

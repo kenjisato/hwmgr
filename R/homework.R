@@ -73,7 +73,7 @@ draft_homework = function(...,
   target_dir = cfg$structure$assignments
 
   # copy template
-  if (!is.null(cfg$templates)) {
+  if (!is.null(cfg$structure$templates)) {
     template_use(cfg$structure$templates[[cfg$template]],
                  target_dir, cfg$id, template_mapper(cfg))
   } else {

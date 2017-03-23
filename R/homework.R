@@ -127,7 +127,8 @@ hw_repo_create = function(name, personal = FALSE, ...,
 
   body = body_create(name = name,
                      description = description,
-                     homepage = homepage, ...)
+                     homepage = homepage,
+                     private = private, ...)
 
   req = if (personal) {
     github_api_create()

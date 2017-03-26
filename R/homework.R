@@ -96,8 +96,9 @@ draft_homework = function(...,
   git2r::add(repo, proj_file)
   git2r::commit(repo, message = "Initial commit.")
   git2r::remote_add(repo, "origin", res$clone_url)
-  git2r::push(repo, "origin", "refs/heads/master",
-              credentials = credentials)
+  git2r::push(repo, "origin", "refs/heads/master", credentials = credentials)
+
+  git2r::branch_set_upstream(git2r::head(repo), "origin/master")
 
   return(list(
     dir = target_dir,

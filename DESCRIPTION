@@ -1,7 +1,7 @@
 Package: hwmgr
 Type: Package
 Title: Homework Management over GitHub Classroom and R
-Version: 0.0.0.9007
+Version: 0.0.0.9008
 Authors@R: person("Kenji", "Sato", email = "kenji@kenjisato.jp",
                   role = c("aut", "cre"))
 Maintainer: Kenji Sato <kenji@kenjisato.jp>

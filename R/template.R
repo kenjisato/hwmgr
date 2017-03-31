@@ -10,7 +10,7 @@ template_use_empty = function(target_dir, name) {
 
 
 template_use = function(template, target_dir, name, map = file.copy,
-                        skip = c(".git", ".Rproj.user")) {
+                        skip = c(".git", ".Rproj.user", ".Rhistory")) {
 
   if (!dir.exists(target_dir)) {
     stop("Target directory ", target_dir, " does not exist.")
@@ -36,7 +36,7 @@ template_to_draft = function(template, target_dir, name, map, skip) {
 
   if (file.info(template)$isdir) {
     dir.create(draft, recursive = TRUE)
-    contents = setdiff(dir(template), c(".", "..", skip))
+    contents = setdiff(dir(template, all.files = TRUE), c(".", "..", skip))
     for (content in contents) {
       inner_template = file.path(template, content)
       template_to_draft(inner_template, draft, content, map, skip)
